@@ -1,0 +1,9 @@
+[submodule "3rd-party/chimeraos"]
+	path = 3rd-party/chimeraos
+	url = https://github.com/ChimeraOS/chimeraos.git
+[submodule "3rd-party/chimera-data"]
+	path = 3rd-party/chimera-data
+	url = https://github.com/ChimeraOS/chimera-data.git
+[submodule "3rd-party/PowerControl"]
+	path = 3rd-party/PowerControl
+	url = https://github.com/mengmeet/PowerControl.git
