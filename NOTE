@@ -1,0 +1,8 @@
+================================
+    设置fcitx https://wiki.archlinuxcn.org/wiki/Fcitx5
+编辑 /etc/environment 并添加以下几行，然后重新登录[1]：
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+SDL_IM_MODULE=fcitx
+GLFW_IM_MODULE=ibus
