@@ -7,3 +7,7 @@
 [submodule "3rd-party/PowerControl"]
 	path = 3rd-party/PowerControl
 	url = https://github.com/mengmeet/PowerControl.git
+[submodule "3rd-party/holoiso_install_main"]
+	path = 3rd-party/holoiso_install_main
+	url = https://github.com/HoloISO/holoiso_install_main.git
+	branch = beta
