@@ -8,6 +8,7 @@ set -x #显示每个命令执行的详细信息。
 
 # shellcheck disable=SC1091
 source "${PWD}"/library.bash
+# shellcheck disable=SC1091
 source "${PWD}"/pkglist.bash
 
 test_network_connection
@@ -44,6 +45,9 @@ EOF
 fi
 pacman_install paru
 
+## Install crudini tool
+aur_install crudini
+
 #############################
 #  End set archlinuxcn repo and install basic aur files
 #############################
@@ -65,9 +69,44 @@ pacman_install ${GAME_STORE_PACKAGE}
 # shellcheck disable=SC2086
 aur_install ${AUR_GAME_PACKAGE}
 
+# shellcheck disable=SC2086
+aur_install ${AUR_PACKAGE}
+
+############
+#
+# TODO delete un-needed package
+#
+############
+
 # Optimizing battery
 pacman_install auto-cpufreq
-run_su_cmd systemctl enable auto-cpufreq
+run_root_cmd systemctl enable auto-cpufreq
+
+# Install SteamDeckHomebrew
+# shellcheck disable=SC1091
+source "{PWD}"/SteamDeckHomebrew_installer.bash
+install_SteamDeckHomebrew
+
+# gamemode for Heroic Games Launcher
+run_root_cmd cp "${SYS_APP_DESKTOP_DIR}"/heroic.desktop "${SYS_APP_DESKTOP_DIR}"/heroic-gamemode.desktop
+# shellcheck disable=SC2026
+run_root_cmd sed -i s'/Exec=\/opt\/Heroic\/heroic\ \%U/Exec=\/usr\/bin\/gamemoderun \/opt\/Heroic\/heroic\ \%U/'g  "${SYS_APP_DESKTOP_DIR}"/heroic-gamemode.desktop
+run_root_cmd crudini -set "${SYS_APP_DESKTOP_DIR}"/heroic-gamemode.desktop "Desktop Entry" Name "Lutris - GameMode"
+
+# steam deck runtime
+run_root_cmd cp "${SYS_APP_DESKTOP_DIR}"/steam.desktop "${SYS_APP_DESKTOP_DIR}"/steam_deck_runtime.desktop
+run_root_cmd sed -i s'/Exec=\/usr\/bin\/steam\-runtime\ \%U/Exec=\/usr\/bin\/steam-runtime\ -gamepadui\ \%U/'g "${SYS_APP_DESKTOP_DIR}"/steam_deck_runtime.desktop
+run_root_cmd crudini --set "${SYS_APP_DESKTOP_DIR}"/steam_deck_runtime.desktop "Desktop Entry" Name "Steam Deck Mode"
+
+############
+#
+# TODO zram or zswap?
+# https://wiki.archlinuxcn.org/wiki/Zram
+#
+############
+  
+
+
 
 
 

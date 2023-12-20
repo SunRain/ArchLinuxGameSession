@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-export USER_NAME=
-export ROOT_PASSWD=
+export USER_NAME=${USER_NAME}
+export ROOT_PASSWD=${ROOT_PASSWD}
+export SYS_APP_DESKTOP_DIR="/usr/share/applications/heroic-gamemode.desktop"
 
 test_network_connection() {
     if ! curl -s https://ping.archlinux.org/ | grep -c "This domain is used for connectivity checking"; then
@@ -11,9 +12,6 @@ test_network_connection() {
 }
 
 test_root_password() {
-    # if echo ${ROOT_PASSWD} | su -c whoami | grep -c "root"; then
-    #     exit 0
-    # fi
     if [ "$ROOT_PASSWD" ]; then
         # shellcheck disable=SC2086
         if echo ${ROOT_PASSWD} | su -c whoami | grep -c "root"; then
@@ -33,7 +31,7 @@ test_root_password() {
 pacman_install() {
     test_root_password
     # shellcheck disable=SC2086
-    echo ${ROOT_PASSWD} | sudo -S pacman -S --noconfirm "$@"
+    echo ${ROOT_PASSWD} | sudo -S pacman -S --noconfirm --needed "$@"
 }
 
 aur_install() {
@@ -43,14 +41,15 @@ aur_install() {
         while true; do
             echo "install $pkg"
             # shellcheck disable=SC2086
-            if echo ${ROOT_PASSWD} | paru -S --noconfirm $pkg; then
+            if echo ${ROOT_PASSWD} | paru -S --noconfirm --removemake $pkg; then
                 break
             fi
         done
     done
 }
 
-run_su_cmd() {
+run_root_cmd() {
     test_root_password
     echo ${ROOT_PASSWD} | sudo -S "$@"
 }
+
