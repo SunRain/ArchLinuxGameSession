@@ -4,6 +4,8 @@ export USER_NAME=${USER_NAME}
 export ROOT_PASSWD=${ROOT_PASSWD}
 export SYS_APP_DESKTOP_DIR="/usr/share/applications/heroic-gamemode.desktop"
 
+export HOLOISO_PATH="${PWD}/3rd-party/holoiso_install_main/src"
+
 test_network_connection() {
     if ! curl -s https://ping.archlinux.org/ | grep -c "This domain is used for connectivity checking"; then
         echo "test network failure"
