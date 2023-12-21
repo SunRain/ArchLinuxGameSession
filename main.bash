@@ -19,10 +19,10 @@ test_network_connection
 # fi
 
 if [ -z "$1" ]; then
-    echo "input user name"
+	echo "input user name"
 fi
 
-USER_NAME=$1;
+USER_NAME=$1
 
 echo "user name ""${USER_NAME}"
 
@@ -30,9 +30,8 @@ echo "user name ""${USER_NAME}"
 #  Start set archlinuxcn repo and install basic aur files
 #############################
 
-if ! grep "repo.archlinuxcn.org/\$arch" /etc/pacman.conf
-then
-	cat << EOF >> /etc/pacman.conf
+if ! grep "repo.archlinuxcn.org/\$arch" /etc/pacman.conf; then
+	cat <<EOF >>/etc/pacman.conf
 
 [archlinuxcn]
 SigLevel = Never
@@ -51,7 +50,6 @@ aur_install crudini
 #############################
 #  End set archlinuxcn repo and install basic aur files
 #############################
-
 
 # Install system packages
 # shellcheck disable=SC2086
@@ -90,7 +88,7 @@ install_SteamDeckHomebrew
 # gamemode for Heroic Games Launcher
 run_root_cmd cp "${SYS_APP_DESKTOP_DIR}"/heroic.desktop "${SYS_APP_DESKTOP_DIR}"/heroic-gamemode.desktop
 # shellcheck disable=SC2026
-run_root_cmd sed -i s'/Exec=\/opt\/Heroic\/heroic\ \%U/Exec=\/usr\/bin\/gamemoderun \/opt\/Heroic\/heroic\ \%U/'g  "${SYS_APP_DESKTOP_DIR}"/heroic-gamemode.desktop
+run_root_cmd sed -i s'/Exec=\/opt\/Heroic\/heroic\ \%U/Exec=\/usr\/bin\/gamemoderun \/opt\/Heroic\/heroic\ \%U/'g "${SYS_APP_DESKTOP_DIR}"/heroic-gamemode.desktop
 run_root_cmd crudini -set "${SYS_APP_DESKTOP_DIR}"/heroic-gamemode.desktop "Desktop Entry" Name "Lutris - GameMode"
 
 # steam deck runtime
@@ -104,15 +102,10 @@ run_root_cmd crudini --set "${SYS_APP_DESKTOP_DIR}"/steam_deck_runtime.desktop "
 # https://wiki.archlinuxcn.org/wiki/Zram
 #
 ############
-  
 
-
-
-
-
-
-
-
-
-
-
+# Instal holoiso files
+#run_root_cmd cp "${HOLOISO_PATH}/steamos-session-select" /usr/bin/steamos-session-select
+#run_root_cmd cp "${HOLOISO_PATH}/steamos-select-branch" "/usr/bin/steamos-select-branch"
+#run_root_cmd cp "${HOLOISO_PATH}/holoiso-disable-sessions" "/usr/bin/holoiso-disable-sessions"
+#run_root_cmd cp "${HOLOISO_PATH}/holoiso-enable-sessions" "$/usr/bin/holoiso-enable-sessions"
+#run_root_cmd cp "${HOLOISO_PATH}/steamos-gamemode.desktop" "$/etc/skel/Desktop/steamos-gamemode.desktop"
