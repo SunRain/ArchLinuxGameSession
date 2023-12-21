@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # shellcheck disable=SC1091
-source "${PWD}"/library.bash
+source "${PWD}/library.bash"
 
 
 # From " https://github.com/SteamDeckHomebrew/decky-installer/blob/main/cli/install_release.sh "
@@ -19,9 +19,9 @@ install_SteamDeckHomebrew() {
     #     exit 1
     # fi
 
-    echo "Installing Steam Deck Plugin Loader release..."
+    echo "Installing Steam Deck Plugin Loader release..."${USER_NAME}
 
-    USER_DIR="$(getent passwd "$USER_NAME" | cut -d: -f6)"
+    USER_DIR="$(getent passwd ${USER_NAME} | cut -d: -f6)"
     HOMEBREW_FOLDER="${USER_DIR}/homebrew"
 
     # Create folder structure

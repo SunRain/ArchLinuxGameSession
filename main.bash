@@ -2,7 +2,7 @@
 
 #debug
 set -e #如果命令执行失败，则立即退出 Shell。
-set -u #如果使用未定义的变量，则显示错误信息并退出 Shell。
+#set -u #如果使用未定义的变量，则显示错误信息并退出 Shell。
 set -x #显示每个命令执行的详细信息。
 #set -v #显示 Shell 中每个命令执行之前的参数和输入。
 
@@ -84,7 +84,7 @@ run_root_cmd systemctl enable auto-cpufreq
 
 # Install SteamDeckHomebrew
 # shellcheck disable=SC1091
-source "{PWD}"/SteamDeckHomebrew_installer.bash
+source "${PWD}/SteamDeckHomebrew_installer.bash“
 install_SteamDeckHomebrew
 
 # gamemode for Heroic Games Launcher
@@ -96,7 +96,7 @@ run_root_cmd crudini -set "${SYS_APP_DESKTOP_DIR}"/heroic-gamemode.desktop "Desk
 # steam deck runtime
 run_root_cmd cp "${SYS_APP_DESKTOP_DIR}"/steam.desktop "${SYS_APP_DESKTOP_DIR}"/steam_deck_runtime.desktop
 run_root_cmd sed -i s'/Exec=\/usr\/bin\/steam\-runtime\ \%U/Exec=\/usr\/bin\/steam-runtime\ -gamepadui\ \%U/'g "${SYS_APP_DESKTOP_DIR}"/steam_deck_runtime.desktop
-run_root_cmd crudini --set "${SYS_APP_DESKTOP_DIR}"/steam_deck_runtime.desktop "Desktop Entry" Name "Steam Deck Mode"
+run_root_cmd crudini --set "${SYS_APP_DESKTOP_DIR}/steam_deck_runtime.desktop" "Desktop Entry" Name "Steam Deck Mode"
 
 ############
 #
