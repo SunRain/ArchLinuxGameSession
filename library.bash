@@ -2,7 +2,7 @@
 
 export USER_NAME=${USER_NAME}
 export ROOT_PASSWD=${ROOT_PASSWD}
-export SYS_APP_DESKTOP_DIR="/usr/share/applications/heroic-gamemode.desktop"
+export SYS_APP_DESKTOP_DIR="/usr/share/applications"
 
 export HOLOISO_PATH="${PWD}/3rd-party/holoiso_install_main/src"
 
@@ -22,9 +22,10 @@ test_root_password() {
     fi
     while true; do
         echo "Input root password: "
-        read -s -r pwd
-        if echo $pwd | su -c whoami | grep -c "root"; then
-            ROOT_PASSWD=$pwd
+        read -s -r rpwd
+        echo "rpwd is""$rpwd"
+        if echo $rpwd | su -c whoami | grep -c "root"; then
+            ROOT_PASSWD=$rpwd
             break
         fi
     done
@@ -33,10 +34,22 @@ test_root_password() {
 pacman_install() {
     test_root_password
     # shellcheck disable=SC2086
-    echo ${ROOT_PASSWD} | sudo -S pacman -S --noconfirm --needed "$@"
+    # shellcheck disable=SC2068
+    echo ${ROOT_PASSWD} | sudo -S pacman -S --noconfirm --needed $@
 }
 
 aur_install() {
+    test_root_password
+    echo "install packages [ $* ]"
+    while true; do
+        # shellcheck disable=SC2086
+        if echo ${ROOT_PASSWD} | paru -S --noconfirm --removemake "$@"; then
+            break
+        fi
+    done
+}
+
+aur_install_each() {
     test_root_password
     echo "install packages [ $* ]"
     for pkg in "$@"; do
@@ -52,6 +65,7 @@ aur_install() {
 
 run_root_cmd() {
     test_root_password
-    echo ${ROOT_PASSWD} | sudo -S "$@"
+    # shellcheck disable=SC2086
+    # echo ${ROOT_PASSWD} | sudo -S -E $@
+    echo ${ROOT_PASSWD} | sudo -S -E bash -c $@
 }
-

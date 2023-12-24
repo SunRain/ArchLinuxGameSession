@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2086
 # shellcheck disable=SC1091
-source "${PWD}/library.bash"
+source ${PWD}/library.bash
 
-
-# From " https://github.com/SteamDeckHomebrew/decky-installer/blob/main/cli/install_release.sh "
+# From https://github.com/SteamDeckHomebrew/decky-installer/blob/main/cli/install_release.sh
+# and  https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/user_install_script.sh
 # with tweaks
+
 install_SteamDeckHomebrew() {
     # check if JQ is installed
     if ! command -v jq &>/dev/null; then
@@ -21,10 +23,11 @@ install_SteamDeckHomebrew() {
 
     echo "Installing Steam Deck Plugin Loader release..."${USER_NAME}
 
-    USER_DIR="$(getent passwd ${USER_NAME} | cut -d: -f6)"
-    HOMEBREW_FOLDER="${USER_DIR}/homebrew"
+    local USER_DIR="$(getent passwd ${USER_NAME} | cut -d: -f6)"
+    local HOMEBREW_FOLDER="${USER_DIR}/homebrew"
 
     # Create folder structure
+    echo "# Creating file structure"
     rm -rf "${HOMEBREW_FOLDER}/services"
     sudo -u "$USER_NAME" mkdir -p "${HOMEBREW_FOLDER}/services"
     sudo -u "$USER_NAME" mkdir -p "${HOMEBREW_FOLDER}/plugins"
@@ -33,12 +36,12 @@ install_SteamDeckHomebrew() {
     [ -d "${USER_DIR}/.var/app/com.valvesoftware.Steam/data/Steam/" ] && sudo -u "$USER_NAME touch ${USER_DIR}/.var/app/com.valvesoftware.Steam/data/Steam/.cef-enable-remote-debugging"
 
     # Download latest release and install it
-    RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
+    local RELEASE=$(curl -s 'https://api.github.com/repos/SteamDeckHomebrew/decky-loader/releases' | jq -r "first(.[] | select(.prerelease == "false"))")
     # shellcheck disable=SC2086
-    VERSION=$(jq -r '.tag_name' <<<${RELEASE})
-    DOWNLOADURL=$(jq -r '.assets[].browser_download_url | select(endswith("PluginLoader"))' <<<${RELEASE})
+    local VERSION=$(jq -r '.tag_name' <<<${RELEASE})
+    local DOWNLOADURL=$(jq -r '.assets[].browser_download_url | select(endswith("PluginLoader"))' <<<${RELEASE})
 
-    printf "Installing version %s...\n" "${VERSION}"
+    echo "# Installing version $VERSION"
     # shellcheck disable=SC2086
     curl -L $DOWNLOADURL --output ${HOMEBREW_FOLDER}/services/PluginLoader
     # shellcheck disable=SC2086
@@ -51,11 +54,22 @@ install_SteamDeckHomebrew() {
     # shellcheck disable=SC2086
     echo $VERSION >${HOMEBREW_FOLDER}/services/.loader.version
 
-    run_root_cmd systemctl --user stop plugin_loader 2>/dev/null
-    run_root_cmd systemctl --user disable plugin_loader 2>/dev/null
+    echo "# Kiling plugin_loader if it exists"
+    if ! run_root_cmd systemctl --user stop plugin_loader 2>/dev/null; then
+        echo "Stop user plugin_loader fail"
+    fi
 
-    run_root_cmd systemctl stop plugin_loader 2>/dev/null
-    run_root_cmd systemctl disable plugin_loader 2>/dev/null
+    if ! run_root_cmd systemctl --user disable plugin_loader 2>/dev/null; then
+        echo "Disable user plugin_loader fial"
+    fi
+
+    if ! run_root_cmd systemctl stop plugin_loader 2>/dev/null; then
+        echo "Stop system-wide plugin_loader fail"
+    fi
+
+    if ! run_root_cmd systemctl disable plugin_loader 2>/dev/null; then
+        echo "Disable system-wide plugin_loader fail"
+    fi
 
     curl -L https://raw.githubusercontent.com/SteamDeckHomebrew/decky-loader/main/dist/plugin_loader-release.service --output ${HOMEBREW_FOLDER}/services/plugin_loader-release.service
 
@@ -78,13 +92,13 @@ WantedBy=multi-user.target
 EOM
 
     if [[ -f "${HOMEBREW_FOLDER}/services/plugin_loader-release.service" ]]; then
-        printf "Grabbed latest release service.\n"
+        echo "Grabbed latest release service."
         sed -i -e "s|\${HOMEBREW_FOLDER}|${HOMEBREW_FOLDER}|" "${HOMEBREW_FOLDER}/services/plugin_loader-release.service"
-        cp -f "${HOMEBREW_FOLDER}/services/plugin_loader-release.service" "/etc/systemd/system/plugin_loader.service"
+        run_root_cmd cp -f "${HOMEBREW_FOLDER}/services/plugin_loader-release.service" "/etc/systemd/system/plugin_loader.service"
     else
-        printf "Could not curl latest release systemd service, using built-in service as a backup!\n"
+        echo "Could not curl latest release systemd service, using built-in service as a backup!"
         rm -f "/etc/systemd/system/plugin_loader.service"
-        cp "${HOMEBREW_FOLDER}/services/plugin_loader-backup.service" "/etc/systemd/system/plugin_loader.service"
+        run_root_cmd cp "${HOMEBREW_FOLDER}/services/plugin_loader-backup.service" "/etc/systemd/system/plugin_loader.service"
     fi
 
     # shellcheck disable=SC2086
