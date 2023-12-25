@@ -6,3 +6,5 @@ QT_IM_MODULE=fcitx
 XMODIFIERS=@im=fcitx
 SDL_IM_MODULE=fcitx
 GLFW_IM_MODULE=ibus
+
+holoiso_install_main/src/new_steamos_dirs/usr/bin/gamescope-wayland-teardown-workaround, 应该添加/usr/bin/gamescope-session-plus？

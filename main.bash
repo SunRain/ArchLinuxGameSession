@@ -124,3 +124,12 @@ echo "${ROOT_PASSWD}" | sudo -S -E bash -c "crudini --set \
 #run_root_cmd cp "${HOLOISO_PATH}/holoiso-disable-sessions" "/usr/bin/holoiso-disable-sessions"
 #run_root_cmd cp "${HOLOISO_PATH}/holoiso-enable-sessions" "$/usr/bin/holoiso-enable-sessions"
 #run_root_cmd cp "${HOLOISO_PATH}/steamos-gamemode.desktop" "$/etc/skel/Desktop/steamos-gamemode.desktop"
+
+source ${PWD}/holoiso_installer.bash
+install_holoiso_files
+
+source ${PWD}/steam-patch_installer.bash
+install_stream_patch
+
+source ${PWD}/chimeraos_installer.bash
+install_chimeraos_files

@@ -11,3 +11,6 @@
 	path = 3rd-party/holoiso_install_main
 	url = https://github.com/HoloISO/holoiso_install_main.git
 	branch = beta
+[submodule "3rd-party/jupiter-hw-support"]
+	path = 3rd-party/jupiter-hw-support
+	url = https://gitlab.com/evlaV/jupiter-hw-support.git

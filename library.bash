@@ -5,6 +5,8 @@ export ROOT_PASSWD=${ROOT_PASSWD}
 export SYS_APP_DESKTOP_DIR="/usr/share/applications"
 
 export HOLOISO_PATH="${PWD}/3rd-party/holoiso_install_main/src"
+export STEAM_JUPITER_PATH="${PWD}/3rd-party/jupiter-hw-support"
+export CHIMEROS_PATH="${PWD}/3rd-party/chimeraos"
 
 test_network_connection() {
     if ! curl -s https://ping.archlinux.org/ | grep -c "This domain is used for connectivity checking"; then
@@ -66,6 +68,6 @@ aur_install_each() {
 run_root_cmd() {
     test_root_password
     # shellcheck disable=SC2086
-    # echo ${ROOT_PASSWD} | sudo -S -E $@
-    echo ${ROOT_PASSWD} | sudo -S -E bash -c $@
+    echo ${ROOT_PASSWD} | sudo -S -E $@
+    # echo ${ROOT_PASSWD} | sudo -S -E bash -c $@
 }

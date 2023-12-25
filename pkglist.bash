@@ -42,6 +42,7 @@ export SYSTEM_PACKAGE_EXTRA="\
     unrar \
     zip \
     coreutils \
+    libdisplay-info \
 "
 export AMD_PACKAGE="\
     mesa \
@@ -161,7 +162,10 @@ export AUR_GAME_PACKAGE="\
     lib32-vkbasalt \
     ludusavi \
     game-devices-udev \
-    ${OP_STEAMLINKER}
+    ${OP_STEAMLINKER} \
+    gamescope-plus \
+    lib32-gamescope-plus \
+    handygccs-git \
 "
 #https://www.emudeck.com/
 export GS_EmuDeck="\
@@ -171,6 +175,7 @@ export AUR_PACKAGE="\
     powerstation-bin \
     protonup-qt \
     ryzenadj-git \
+    chimeraos-device-quirks-git \
 "
 #    zenergy-dkms-git \
 
