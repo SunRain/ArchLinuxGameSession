@@ -71,6 +71,15 @@ aur_install ${AUR_GAME_PACKAGE}
 # shellcheck disable=SC2086
 aur_install ${AUR_PACKAGE}
 
+# Fix conflict with game-devices-udev
+## These 2 packages contains /usr/lib/udev/rules.d/71-sony-controllers.rules 
+while true; do
+	# shellcheck disable=SC2086
+	if echo ${ROOT_PASSWD} | paru -S --noconfirm --overwrite \* --removemake chimeraos-device-quirks-git; then
+		break
+	fi
+done
+
 ############
 #
 # TODO delete un-needed package
@@ -91,10 +100,10 @@ install_SteamDeckHomebrew
 # shellcheck disable=SC2086
 run_root_cmd cp ${SYS_APP_DESKTOP_DIR}/heroic.desktop ${SYS_APP_DESKTOP_DIR}/heroic-gamemode.desktop
 EXEC_VAR=$(echo "${ROOT_PASSWD}" | sudo -S -E bash -c 'crudini --get ${SYS_APP_DESKTOP_DIR}/heroic-gamemode.desktop "Desktop Entry" "Exec"')
-EXEC_VAR="\/usr\/bin\/gamemoderun ${EXEC_VAR}"
+EXEC_VAR="/usr/bin/gamemoderun ${EXEC_VAR}"
 echo "${ROOT_PASSWD}" | sudo -S -E bash -c "crudini --set ${SYS_APP_DESKTOP_DIR}/heroic-gamemode.desktop \"Desktop Entry\" Exec \"${EXEC_VAR}\""
 unset EXEC_VAR
-echo "${ROOT_PASSWD}" | sudo -S -E bash -c "crudini --set ${SYS_APP_DESKTOP_DIR}/heroic-gamemode.desktop \"Desktop Entry\" Name \"Lutris - GameMode\""
+echo "${ROOT_PASSWD}" | sudo -S -E bash -c "crudini --set ${SYS_APP_DESKTOP_DIR}/heroic-gamemode.desktop \"Desktop Entry\" Name \"heroic - GameMode\""
 
 # steam deck runtime
 # shellcheck disable=SC2086

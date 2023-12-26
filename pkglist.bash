@@ -175,7 +175,7 @@ export AUR_PACKAGE="\
     powerstation-bin \
     protonup-qt \
     ryzenadj-git \
-    chimeraos-device-quirks-git \
+    ${GS_EmuDeck} \
 "
 #    zenergy-dkms-git \
 
